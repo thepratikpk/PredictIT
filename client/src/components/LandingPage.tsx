@@ -3,18 +3,12 @@ import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { 
   Brain, 
-  Upload, 
   Settings, 
-  BarChart3, 
   ArrowRight, 
   CheckCircle,
   Zap,
-  Shield,
-  Code,
   Database,
   TrendingUp,
-  Users,
-  User,
   LogOut
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';

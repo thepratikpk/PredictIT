@@ -3,14 +3,13 @@ import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { BarChart3, CheckCircle, XCircle } from 'lucide-react';
 import { usePipelineStore } from '../../store/pipelineStore';
-import { NodeData } from '../../types';
 
 interface ResultNodeProps {
   id: string;
-  data: NodeData;
+  data: any; // Simplified for legacy component
 }
 
-export const ResultNode: React.FC<ResultNodeProps> = ({ data }) => {
+export const ResultNode: React.FC<ResultNodeProps> = () => {
   const { results, isRunning } = usePipelineStore();
 
   const renderConfusionMatrix = (matrix: number[][]) => {

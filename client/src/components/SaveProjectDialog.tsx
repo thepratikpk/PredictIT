@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { X, Save, Loader2, Upload, CheckCircle } from 'lucide-react';
+import { X, Save, Loader2, CheckCircle } from 'lucide-react';
 import { usePipelineStore } from '../store/pipelineStore';
 
 interface SaveProjectDialogProps {

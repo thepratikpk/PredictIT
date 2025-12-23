@@ -1,16 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Split } from 'lucide-react';
-import { usePipelineStore } from '../../store/pipelineStore';
-import { NodeData } from '../../types';
 
 interface SplitNodeProps {
   id: string;
-  data: NodeData;
+  data: any; // Simplified for legacy component
 }
 
-export const SplitNode: React.FC<SplitNodeProps> = ({ id, data }) => {
+export const SplitNode: React.FC<SplitNodeProps> = () => {
   // Legacy component - simplified
   
   return (

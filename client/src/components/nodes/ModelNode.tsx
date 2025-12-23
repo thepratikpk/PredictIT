@@ -1,16 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Brain } from 'lucide-react';
-import { usePipelineStore } from '../../store/pipelineStore';
-import { NodeData } from '../../types';
 
 interface ModelNodeProps {
   id: string;
-  data: NodeData;
+  data: any; // Simplified for legacy component
 }
 
-export const ModelNode: React.FC<ModelNodeProps> = ({ id, data }) => {
+export const ModelNode: React.FC<ModelNodeProps> = () => {
   // Legacy component - simplified for compatibility
   
   return (

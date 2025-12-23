@@ -18,7 +18,7 @@ function App() {
   const sidebarRef = useRef<{ refreshProjects: () => void } | null>(null);
   
   const { loadFromStorage, currentStep, datasetInfo, loadProject, startNewPipeline } = usePipelineStore();
-  const { loadFromStorage: loadAuthFromStorage, token, isAuthenticated, user } = useAuthStore();
+  const { loadFromStorage: loadAuthFromStorage, token, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     // Load persisted state on app start (only once)

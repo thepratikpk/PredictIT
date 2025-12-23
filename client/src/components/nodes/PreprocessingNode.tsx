@@ -1,16 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Settings } from 'lucide-react';
-import { usePipelineStore } from '../../store/pipelineStore';
-import { NodeData } from '../../types';
 
 interface PreprocessingNodeProps {
   id: string;
-  data: NodeData;
+  data: any; // Simplified for legacy component
 }
 
-export const PreprocessingNode: React.FC<PreprocessingNodeProps> = ({ id, data }) => {
+export const PreprocessingNode: React.FC<PreprocessingNodeProps> = () => {
   // Legacy component - simplified
   
   return (
