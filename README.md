@@ -2,17 +2,24 @@
 
 A powerful, user-friendly machine learning pipeline builder that allows anyone to create, train, and deploy ML models without writing code.
 
-![PredictIT Banner](https://via.placeholder.com/800x200/1e293b/ffffff?text=PredictIT+-+ML+Made+Simple)
+![PredictIT](https://img.shields.io/badge/PredictIT-ML%20Pipeline%20Builder-blue?style=for-the-badge&logo=react)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-green?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+
+## 🌟 **Live Demo**
+- **Frontend**: [https://predictit.vercel.app](https://predictit.vercel.app) *(Update with your URL)*
+- **API**: [https://predictit-backend.railway.app](https://predictit-backend.railway.app) *(Update with your URL)*
 
 ## ✨ Features
 
-- 🚀 **No-Code Interface** - Build ML pipelines with intuitive drag-and-drop
+- 🚀 **No-Code Interface** - Build ML pipelines with intuitive step-by-step process
 - 📊 **Smart Data Processing** - Automatic data type detection and preprocessing
-- 🧠 **Multiple ML Models** - Support for various algorithms (Logistic Regression, Decision Trees, etc.)
+- 🧠 **Multiple ML Models** - Support for Logistic Regression, Decision Trees, and more
 - 💾 **Cloud Storage** - Seamless integration with Cloudinary for data persistence
-- 👥 **User Management** - Secure authentication and project management
-- 📱 **Responsive Design** - Works perfectly on desktop and mobile
+- 👥 **User Management** - Secure authentication and personal project management
+- 📱 **Responsive Design** - Works perfectly on desktop, tablet, and mobile
 - ⚡ **Real-time Training** - Watch your models train with live progress updates
+- 🔄 **Project Management** - Save, load, and manage multiple ML pipelines
 
 ## 🛠️ Tech Stack
 
@@ -20,15 +27,23 @@ A powerful, user-friendly machine learning pipeline builder that allows anyone t
 - **React 18** with TypeScript
 - **Vite** for fast development and building
 - **Tailwind CSS** for styling
-- **Framer Motion** for animations
+- **Framer Motion** for smooth animations
 - **Zustand** for state management
+- **Axios** for API communication
 
 ### Backend
 - **FastAPI** for high-performance API
 - **Python** with scikit-learn for ML
-- **MongoDB** for data persistence
+- **MongoDB Atlas** for data persistence
 - **Cloudinary** for file storage
-- **JWT** for authentication
+- **JWT** for secure authentication
+- **Uvicorn** for ASGI server
+
+### Infrastructure
+- **Vercel** for frontend hosting
+- **Railway** for backend hosting
+- **MongoDB Atlas** for database
+- **Cloudinary** for file storage
 
 ## 🚀 Quick Start
 

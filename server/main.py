@@ -26,7 +26,13 @@ except ImportError as e:
     AUTH_AVAILABLE = False
     MONGODB_AVAILABLE = False
 
-app = FastAPI(title="PredictIT API", version="1.0.0")
+app = FastAPI(
+    title="PredictIT API", 
+    version="1.0.0",
+    description="machine learning pipeline builder",
+    docs_url="/docs" if os.getenv("ENVIRONMENT") != "production" else None,
+    redoc_url="/redoc" if os.getenv("ENVIRONMENT") != "production" else None
+)
 
 # CORS middleware
 app.add_middleware(

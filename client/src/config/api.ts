@@ -2,7 +2,7 @@
 const getApiUrl = (): string => {
   // In production, use the deployed backend URL
   if (import.meta.env.PROD) {
-    // Replace this with your actual deployed backend URL
+    // TODO: Replace this with your actual Railway backend URL after deployment
     return 'https://predictit-backend-production.up.railway.app';
   }
   
@@ -12,7 +12,10 @@ const getApiUrl = (): string => {
 
 export const API_BASE_URL = getApiUrl();
 
-console.log(`🔗 API Base URL: ${API_BASE_URL} (Mode: ${import.meta.env.MODE})`);
+// Log the API URL for debugging (only in development)
+if (import.meta.env.DEV) {
+  console.log(`🔗 API Base URL: ${API_BASE_URL} (Mode: ${import.meta.env.MODE})`);
+}
 
 // API endpoints
 export const API_ENDPOINTS = {

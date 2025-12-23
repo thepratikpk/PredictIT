@@ -168,21 +168,7 @@ Environment Variables
 Add these in Railway dashboard → Variables:
 
 ```env
-# Database
-MONGODB_URI=mongodb+srv://predictit-user:<password>@predictit-cluster.xxxxx.mongodb.net/predictit?retryWrites=true&w=majority
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-
-# JWT
-JWT_SECRET_KEY=your-super-secret-jwt-key-here-make-it-long-and-random
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# Environment
-ENVIRONMENT=production
 ```
 
 ### Frontend Environment Variables (Vercel)
