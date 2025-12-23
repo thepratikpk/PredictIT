@@ -186,7 +186,7 @@ export const StepBasedPipeline: React.FC<StepBasedPipelineProps> = ({ onBack, on
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex justify-between relative">
-                  {steps.map((step, index) => {
+                  {steps.map((step) => {
                     const status = getStepStatus(step.id);
                     const isClickable = canProceedToStep(step.id);
                     

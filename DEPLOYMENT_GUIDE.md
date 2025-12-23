@@ -48,24 +48,20 @@ Frontend Deployment (Vercel)
 
 ### Step 1: Create API Configuration
 
-Create `client/src/config/api.ts`:
+The API configuration is already created in `client/src/config/api.ts`. 
+
+**Important**: Update the production URL after deploying your backend:
 ```typescript
-export const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-domain.railway.app'  // Replace with your backend URL
-  : 'http://localhost:8000';
+// In client/src/config/api.ts
+// Replace 'https://your-backend-domain.railway.app' with your actual Railway URL
 ```
 
-### Step 2: Update API Calls
+### Step 2: Create Environment File
 
-Update all fetch calls to use the config:
-```typescript
-// Example: Update in client/src/store/authStore.ts
-import { API_BASE_URL } from '../config/api';
-
-// Replace 'http://localhost:8000' with API_BASE_URL
-const response = await fetch(`${API_BASE_URL}/auth/login`, {
-  // ... rest of the code
-});
+Create `client/.env.local`:
+```env
+VITE_API_URL=http://localhost:8000
+NODE_ENV=development
 ```
 
 ### Step 3: Deploy to Vercel

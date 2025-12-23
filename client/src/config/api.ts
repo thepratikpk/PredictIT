@@ -1,8 +1,19 @@
 // API Configuration for different environments
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'production' 
-    ? 'https://your-backend-domain.railway.app'  // Replace with your actual backend URL
-    : 'http://localhost:8000');
+const getApiUrl = (): string => {
+  // Check for environment variable first
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Fallback based on mode
+  if (import.meta.env.MODE === 'production') {
+    return 'https://your-backend-domain.railway.app'; // Replace with your actual backend URL
+  }
+  
+  return 'http://localhost:8000';
+};
+
+export const API_BASE_URL = getApiUrl();
 
 // API endpoints
 export const API_ENDPOINTS = {
