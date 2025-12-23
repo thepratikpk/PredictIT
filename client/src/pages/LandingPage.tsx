@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
 import { 
   Brain, 
   Upload, 
@@ -9,8 +9,7 @@ import {
   ArrowRight, 
   CheckCircle,
   Users,
-  Clock,
-  Shield
+  Clock
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -195,7 +194,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 { step: 3, title: "Split Data", desc: "Train/test division" },
                 { step: 4, title: "Train Model", desc: "Automated training" },
                 { step: 5, title: "Get Results", desc: "Predictions & insights" }
-              ].map((item, index) => (
+              ].map((item) => (
                 <div key={item.step} className="text-center">
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
                     {item.step}

@@ -10,7 +10,7 @@ interface ResultNodeProps {
   data: NodeData;
 }
 
-export const ResultNode: React.FC<ResultNodeProps> = ({ id, data }) => {
+export const ResultNode: React.FC<ResultNodeProps> = ({ data }) => {
   const { results, isRunning } = usePipelineStore();
 
   const renderConfusionMatrix = (matrix: number[][]) => {

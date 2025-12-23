@@ -26,7 +26,7 @@ export const DataUploadStep: React.FC<DataUploadStepProps> = ({ onNext }) => {
       setSessionId(response.session_id);
       
       // Store file information (no Cloudinary URL yet)
-      setFileInfo(null, response.filename);
+      setFileInfo(null, file.name);
       
       const info = {
         filename: file.name,
