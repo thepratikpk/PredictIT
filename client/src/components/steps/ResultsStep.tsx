@@ -5,6 +5,7 @@ import { BarChart3, ArrowLeft, RefreshCw, CheckCircle, XCircle, TrendingUp, Targ
 import { trainModel, preprocessData } from '../../api/mlApi';
 import { usePipelineStore } from '../../store/pipelineStore';
 import { useAuthStore } from '../../store/authStore';
+import { API_BASE_URL } from '../../config/api';
 
 interface ResultsStepProps {
   onPrevious: () => void;
@@ -57,7 +58,7 @@ export const ResultsStep: React.FC<ResultsStepProps> = ({ onPrevious, onReset, o
     setSaveError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/projects/save', {
+      const response = await fetch(`${API_BASE_URL}/projects/save`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -234,7 +235,7 @@ export const ResultsStep: React.FC<ResultsStepProps> = ({ onPrevious, onReset, o
     setPredictionError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/predict', {
+      const response = await fetch(`${API_BASE_URL}/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { API_BASE_URL } from '../config/api';
 
 interface ChatMessage {
   id: string;
@@ -35,8 +36,6 @@ interface ChatState {
   generateSessionId: () => string;
 }
 
-const API_BASE = 'http://localhost:8000';
-
 export const useChatStore = create<ChatState>((set, get) => ({
   currentSessionId: null,
   messages: [],
@@ -67,7 +66,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set({ isLoading: true });
     
     try {
-      const response = await fetch(`${API_BASE}/chat/history/${sessionId}`, {
+      const response = await fetch(`${API_BASE_URL}/chat/history/${sessionId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -92,7 +91,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!token) return;
     
     try {
-      const response = await fetch(`${API_BASE}/chat/sessions`, {
+      const response = await fetch(`${API_BASE_URL}/chat/sessions`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -115,7 +114,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!token) return;
     
     try {
-      const response = await fetch(`${API_BASE}/chat/message`, {
+      const response = await fetch(`${API_BASE_URL}/chat/message`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -142,7 +141,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!token) return;
     
     try {
-      const response = await fetch(`${API_BASE}/chat/session/${sessionId}`, {
+      const response = await fetch(`${API_BASE_URL}/chat/session/${sessionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { UploadResponse, TrainRequest, TrainResponse } from '../types';
-
-const API_BASE_URL = 'http://localhost:8000';
+import { API_BASE_URL } from '../config/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -46,23 +46,23 @@ git push -u origin main
 ## 🎨 
 Frontend Deployment (Vercel)
 
-### Step 1: Create API Configuration
+### Step 1: Update Production Backend URL
 
-The API configuration is already created in `client/src/config/api.ts`. 
+**Important**: Before deploying, update the production backend URL in `client/src/config/api.ts`:
 
-**Important**: Update the production URL after deploying your backend:
 ```typescript
-// In client/src/config/api.ts
-// Replace 'https://your-backend-domain.railway.app' with your actual Railway URL
+// In client/src/config/api.ts - Line 4
+// Replace this URL with your actual Railway backend URL
+return 'https://predictit-backend-production.up.railway.app';
 ```
 
-### Step 2: Create Environment File
+### Step 2: Automatic Environment Detection
 
-Create `client/.env.local`:
-```env
-VITE_API_URL=http://localhost:8000
-NODE_ENV=development
-```
+The app now automatically detects the environment:
+- **Development**: Uses `http://localhost:8000`
+- **Production**: Uses your deployed backend URL
+
+No need to create environment files - it works automatically!
 
 ### Step 3: Deploy to Vercel
 

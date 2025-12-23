@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { API_BASE_URL } from '../config/api';
 
 interface User {
   id: string;
@@ -54,7 +55,7 @@ export const useAuthStore = create<AuthState>()(
     login: async (email: string, password: string) => {
       set({ isLoading: true });
       try {
-        const response = await fetch('http://localhost:8000/auth/login', {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ export const useAuthStore = create<AuthState>()(
     register: async (name: string, email: string, password: string) => {
       set({ isLoading: true });
       try {
-        const response = await fetch('http://localhost:8000/auth/register', {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -179,7 +180,7 @@ if (typeof window !== 'undefined') {
   const existingToken = localStorage.getItem('auth_token');
   if (existingToken && !store.token) {
     // Verify token is still valid
-    fetch('http://localhost:8000/auth/me', {
+    fetch(`${API_BASE_URL}/auth/me`, {
       headers: {
         'Authorization': `Bearer ${existingToken}`,
         'Content-Type': 'application/json'

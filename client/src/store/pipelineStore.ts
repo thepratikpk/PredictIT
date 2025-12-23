@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { API_BASE_URL } from '../config/api';
 
 interface PipelineState {
   // Core state
@@ -142,7 +143,7 @@ export const usePipelineStore = create<PipelineState>()(
       
       // Clean up temp files if session exists
       if (state.sessionId) {
-        fetch(`http://localhost:8000/cleanup/session/${state.sessionId}`, {
+        fetch(`${API_BASE_URL}/cleanup/session/${state.sessionId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -161,7 +162,7 @@ export const usePipelineStore = create<PipelineState>()(
       
       // Clean up temp files if session exists
       if (state.sessionId) {
-        fetch(`http://localhost:8000/cleanup/session/${state.sessionId}`, {
+        fetch(`${API_BASE_URL}/cleanup/session/${state.sessionId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -195,7 +196,7 @@ export const usePipelineStore = create<PipelineState>()(
       });
       
       try {
-        const response = await fetch('http://localhost:8000/projects/save', {
+        const response = await fetch(`${API_BASE_URL}/projects/save`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -241,7 +242,7 @@ export const usePipelineStore = create<PipelineState>()(
       
       try {
         console.log(`📂 Loading project: ${projectId}`);
-        const response = await fetch(`http://localhost:8000/projects/${projectId}`, {
+        const response = await fetch(`${API_BASE_URL}/projects/${projectId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

@@ -1,19 +1,18 @@
 // API Configuration for different environments
 const getApiUrl = (): string => {
-  // Check for environment variable first
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+  // In production, use the deployed backend URL
+  if (import.meta.env.PROD) {
+    // Replace this with your actual deployed backend URL
+    return 'https://predictit-backend-production.up.railway.app';
   }
   
-  // Fallback based on mode
-  if (import.meta.env.MODE === 'production') {
-    return 'https://your-backend-domain.railway.app'; // Replace with your actual backend URL
-  }
-  
+  // In development, use local backend
   return 'http://localhost:8000';
 };
 
 export const API_BASE_URL = getApiUrl();
+
+console.log(`🔗 API Base URL: ${API_BASE_URL} (Mode: ${import.meta.env.MODE})`);
 
 // API endpoints
 export const API_ENDPOINTS = {

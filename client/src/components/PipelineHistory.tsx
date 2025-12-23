@@ -19,6 +19,7 @@ import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { useAuthStore } from '../store/authStore';
 import { usePipelineStore } from '../store/pipelineStore';
+import { API_BASE_URL } from '../config/api';
 
 interface SavedPipeline {
   id: string;
@@ -71,7 +72,7 @@ export const ModernSidebar = forwardRef<
     console.log('📡 Loading saved pipelines...');
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/projects', {
+      const response = await fetch(`${API_BASE_URL}/projects`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ export const ModernSidebar = forwardRef<
     if (!token || !confirm('Are you sure you want to delete this pipeline? This will also delete the associated files from cloud storage.')) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/projects/${pipelineId}`, {
+      const response = await fetch(`${API_BASE_URL}/projects/${pipelineId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
