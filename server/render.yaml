@@ -1,0 +1,21 @@
+services:
+  # Backend API Service Only
+  - type: web
+    name: predictit-api
+    env: python
+    buildCommand: "cd server && pip install -r requirements.txt"
+    startCommand: "cd server && python start.py"
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.9
+      - key: ENVIRONMENT
+        value: production
+    # Add your environment variables here:
+    # - key: MONGODB_URL
+    #   value: your_mongodb_connection_string
+    # - key: CLOUDINARY_URL  
+    #   value: your_cloudinary_url
+    # - key: SECRET_KEY
+    #   value: your_secret_key
