@@ -4,7 +4,6 @@ import { StepBasedPipeline } from './components/StepBasedPipeline';
 import { ModernSidebar } from './components/PipelineHistory';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/auth/AuthModal';
-import { AuthTestHelper } from './components/auth/AuthTestHelper';
 import { usePipelineStore } from './store/pipelineStore';
 import { useAuthStore } from './store/authStore';
 
@@ -233,9 +232,6 @@ function App() {
           },
         }}
       />
-      
-      {/* Auth Test Helper (Development only) */}
-      <AuthTestHelper />
     </div>
   );
 }

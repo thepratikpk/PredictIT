@@ -129,7 +129,6 @@ See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for complete setup instructions.
 - **Specific Error Messages** for account not found, wrong credentials, validation errors
 - **Client-side Validation** with real-time field validation and visual feedback
 - **Security Testing** including input sanitization and rate limiting
-- **Development Test Helper** for easy testing of auth scenarios (dev mode only)
 
 See [AUTH_TEST_CASES.md](./AUTH_TEST_CASES.md) for complete test documentation.
 
