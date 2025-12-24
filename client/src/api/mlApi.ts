@@ -7,7 +7,25 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 30000, // 30 second timeout
 });
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Enhanced error handling for common issues
+    if (error.code === 'ECONNABORTED') {
+      error.message = 'Request timeout - the server is taking too long to respond';
+    } else if (error.message?.includes('Network Error')) {
+      error.message = 'Network error - cannot connect to the backend server';
+    } else if (error.response?.status === 0) {
+      error.message = 'Connection failed - backend server is not accessible';
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export const uploadFile = async (file: File): Promise<UploadResponse> => {
   const formData = new FormData();

@@ -4,6 +4,7 @@ import { Button } from '../Button';
 import { Upload, AlertCircle, CheckCircle, Database, ArrowRight } from 'lucide-react';
 import { uploadFile } from '../../api/mlApi';
 import { usePipelineStore } from '../../store/pipelineStore';
+import { ConnectionTest } from '../ConnectionTest';
 
 interface DataUploadStepProps {
   onNext: () => void;
@@ -39,7 +40,24 @@ export const DataUploadStep: React.FC<DataUploadStepProps> = ({ onNext }) => {
       };
       setDatasetInfo(info);
     } catch (error: any) {
-      setUploadError(error.response?.data?.detail || 'Failed to upload file');
+      console.error('Upload error:', error);
+      
+      // Better error handling for different types of errors
+      let errorMessage = 'Failed to upload file';
+      
+      if (error.message?.includes('CORS') || error.message?.includes('Access-Control-Allow-Origin')) {
+        errorMessage = 'Connection error: Backend service is not accessible. Please check if the API server is running.';
+      } else if (error.message?.includes('ERR_FAILED') || error.message?.includes('net::')) {
+        errorMessage = 'Network error: Cannot connect to the backend server. Please try again later.';
+      } else if (error.response?.status === 0) {
+        errorMessage = 'Connection failed: Backend server is not responding. Please check your internet connection.';
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
     }
@@ -70,6 +88,9 @@ export const DataUploadStep: React.FC<DataUploadStepProps> = ({ onNext }) => {
 
   return (
     <div className="space-y-6">
+      {/* Connection Test Component */}
+      <ConnectionTest />
+      
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
