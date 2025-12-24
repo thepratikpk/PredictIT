@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../config/api';
 
 interface User {
@@ -132,6 +133,9 @@ export const useAuthStore = create<AuthState>()(
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem('auth_token');
       localStorage.removeItem('ml-pipeline-view-mode');
+      
+      // Show logout toast
+      toast.success('Successfully logged out. See you next time!');
     },
     
     loadFromStorage: () => {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { StepBasedPipeline } from './components/StepBasedPipeline';
 import { ModernSidebar } from './components/PipelineHistory';
 import { LandingPage } from './components/LandingPage';
@@ -162,6 +163,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Mobile sidebar overlay */}
+      {!sidebarCollapsed && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={() => setSidebarCollapsed(true)}
+        />
+      )}
+      
       <ModernSidebar
         onAuthClick={handleAuthClick}
         onNewPipeline={() => {
@@ -175,15 +184,19 @@ function App() {
         ref={sidebarRef}
       />
       
-      {/* Main content with dynamic margin based on sidebar state */}
+      {/* Main content with responsive margin */}
       <main 
         className={`min-h-screen overflow-y-auto transition-all duration-300 ${
-          sidebarCollapsed ? 'ml-16' : 'ml-80'
+          sidebarCollapsed 
+            ? 'ml-0 lg:ml-16' 
+            : 'ml-0 lg:ml-80'
         }`}
       >
         <StepBasedPipeline 
           onBack={handleBackToHome}
           onProjectSaved={handleProjectSaved}
+          sidebarCollapsed={sidebarCollapsed}
+          setSidebarCollapsed={setSidebarCollapsed}
         />
       </main>
       
@@ -192,6 +205,32 @@ function App() {
         onClose={() => setShowAuthModal(false)}
         initialMode={authMode}
         onSuccess={() => setShowAuthModal(false)}
+      />
+      
+      {/* Toast notifications */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+            fontSize: '14px',
+            maxWidth: '90vw',
+          },
+          success: {
+            duration: 3000,
+            style: {
+              background: '#10b981',
+            },
+          },
+          error: {
+            duration: 5000,
+            style: {
+              background: '#ef4444',
+            },
+          },
+        }}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { Button } from '../Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
@@ -36,13 +37,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     try {
       if (mode === 'login') {
         await login(formData.email, formData.password);
+        toast.success('Welcome back! Successfully logged in.');
       } else {
         await register(formData.name, formData.email, formData.password);
+        toast.success('Account created successfully! Welcome to PredictIT.');
       }
       onSuccess?.();
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+      const errorMessage = err.message || 'Authentication failed';
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -73,10 +78,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </Button>
 
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">
+              <CardTitle className="text-xl sm:text-2xl">
                 {mode === 'login' ? 'Welcome Back' : 'Create Account'}
               </CardTitle>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
                 {mode === 'login' 
                   ? 'Sign in to save your ML projects' 
                   : 'Join us to save and manage your projects'

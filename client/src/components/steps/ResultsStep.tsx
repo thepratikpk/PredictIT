@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 import { Button } from '../Button';
 import { BarChart3, ArrowLeft, RefreshCw, CheckCircle, XCircle, TrendingUp, Target, AlertCircle, Brain, Save, BookmarkPlus } from 'lucide-react';
@@ -190,11 +191,17 @@ export const ResultsStep: React.FC<ResultsStepProps> = ({ onPrevious, onReset, o
 
       setResults(response);
       setStoreResults(response);
+      
+      // Show success toast
+      toast.success(`Model trained successfully! Accuracy: ${(response.accuracy * 100).toFixed(1)}%`);
     } catch (err: any) {
       const errorMessage = err.response?.data?.detail || err.message || 'Training failed';
       setError(errorMessage);
       console.error('Training error:', err);
       console.error('Error response:', err.response?.data);
+      
+      // Show error toast
+      toast.error(`Training failed: ${errorMessage}`);
       
       setAnimationState({
         currentPhase: 'idle',

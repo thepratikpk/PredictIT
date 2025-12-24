@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Button } from './Button';
 import { Card, CardContent, CardHeader, CardTitle } from './Card';
 import { X, Save, Loader2, CheckCircle } from 'lucide-react';
@@ -40,6 +41,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
       if (projectId) {
         console.log('✅ Project saved successfully:', projectId);
         setUploadStatus('success');
+        toast.success(`Project "${name}" saved successfully!`);
         
         // Call onSaved immediately to refresh the list
         onSaved?.(projectId);
@@ -52,12 +54,16 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
         }, 1500);
       } else {
         setUploadStatus('error');
-        setError('Failed to save project. Please try again.');
+        const errorMsg = 'Failed to save project. Please try again.';
+        setError(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error) {
       console.error('❌ Save project error:', error);
       setUploadStatus('error');
-      setError('Failed to save project. Please try again.');
+      const errorMsg = 'Failed to save project. Please try again.';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setIsSaving(false);
     }

@@ -38,7 +38,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-         "https://predict-it-zeta.vercel.app",  # Your current Vercel deployment
+         "https://predict-it-zeta.vercel.app",
+         "http://localhost:5173"  # Your current Vercel domain
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],

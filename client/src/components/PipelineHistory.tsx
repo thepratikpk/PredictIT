@@ -1,5 +1,6 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 import {
   Plus,
   MessageSquare,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Button } from './Button';
 import { Card, CardContent } from './Card';
+import { DeletingAnimation } from './DeletingAnimation';
 import { useAuthStore } from '../store/authStore';
 import { usePipelineStore } from '../store/pipelineStore';
 import { API_BASE_URL } from '../config/api';
@@ -54,6 +56,8 @@ export const ModernSidebar = forwardRef<
   const [selectedPipeline, setSelectedPipeline] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingPipelineName, setDeletingPipelineName] = useState('');
 
   const { user, isAuthenticated, logout, token } = useAuthStore();
   const { resetPipeline } = usePipelineStore();
@@ -110,7 +114,11 @@ export const ModernSidebar = forwardRef<
   const handleDeletePipeline = async (pipelineId: string, e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!token || !confirm('Are you sure you want to delete this pipeline? This will also delete the associated files from cloud storage.')) return;
+    const pipeline = savedPipelines.find(p => p.id === pipelineId);
+    if (!token || !pipeline || !confirm('Are you sure you want to delete this pipeline? This will also delete the associated files from cloud storage.')) return;
+
+    setIsDeleting(true);
+    setDeletingPipelineName(pipeline.name);
 
     try {
       const response = await fetch(`${API_BASE_URL}/projects/${pipelineId}`, {
@@ -125,13 +133,22 @@ export const ModernSidebar = forwardRef<
         console.log('Project deleted:', result);
         setSavedPipelines(prev => prev.filter(p => p.id !== pipelineId));
 
+        // Show success toast
+        toast.success(`Pipeline "${pipeline.name}" deleted successfully!`);
+
         // Show success message if files were cleaned up
         if (result.cloudinary_deleted || result.temp_files_cleaned) {
           console.log('✅ Associated files cleaned up successfully');
         }
+      } else {
+        throw new Error('Failed to delete pipeline');
       }
     } catch (error) {
       console.error('Failed to delete pipeline:', error);
+      toast.error(`Failed to delete pipeline "${pipeline.name}"`);
+    } finally {
+      setIsDeleting(false);
+      setDeletingPipelineName('');
     }
   };
 
@@ -184,10 +201,20 @@ export const ModernSidebar = forwardRef<
 
   return (
     <motion.div
-      className={`sidebar-gradient border-r border-slate-200/60 flex flex-col h-screen transition-smooth shadow-professional-lg fixed left-0 top-0 z-40 ${isCollapsed ? 'w-16' : 'w-80'
-        }`}
+      className={`sidebar-gradient border-r border-slate-200/60 flex flex-col h-screen transition-smooth shadow-professional-lg fixed left-0 top-0 z-40 ${
+        isCollapsed 
+          ? 'w-16 lg:w-16' 
+          : 'w-80 lg:w-80'
+      } ${
+        isCollapsed 
+          ? '-translate-x-full lg:translate-x-0' 
+          : 'translate-x-0'
+      }`}
       initial={false}
-      animate={{ width: isCollapsed ? 64 : 320 }}
+      animate={{ 
+        width: isCollapsed ? 64 : 320,
+        x: isCollapsed ? (window.innerWidth < 1024 ? -320 : 0) : 0
+      }}
     >
       {/* Header */}
       <div className="p-6 border-b border-slate-200/60 glass-effect">
@@ -204,7 +231,7 @@ export const ModernSidebar = forwardRef<
               </div>
               <div>
                 <span className="font-bold text-slate-900 text-lg">PredictIT</span>
-                <p className="text-xs text-slate-500 mt-0.5">AI-Powered Analytics</p>
+                <p className="text-xs text-slate-500 mt-0.5">ML Pipeline Builder</p>
               </div>
             </motion.div>
           )}
@@ -366,23 +393,23 @@ export const ModernSidebar = forwardRef<
                                 {pipeline.description || 'No description provided'}
                               </p>
 
-                              <div className="flex items-center gap-4 text-xs text-slate-500">
-                                <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg">
-                                  <Calendar className="w-3 h-3" />
-                                  {formatDate(pipeline.updated_at)}
+                              <div className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
+                                <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg whitespace-nowrap">
+                                  <Calendar className="w-3 h-3 flex-shrink-0" />
+                                  <span className="truncate">{formatDate(pipeline.updated_at)}</span>
                                 </div>
 
                                 {pipeline.dataset_info && (
-                                  <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg">
-                                    <Database className="w-3 h-3" />
-                                    {pipeline.dataset_info.row_count} rows
+                                  <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg whitespace-nowrap">
+                                    <Database className="w-3 h-3 flex-shrink-0" />
+                                    <span className="truncate">{pipeline.dataset_info.row_count} rows</span>
                                   </div>
                                 )}
 
                                 {pipeline.results && (
-                                  <div className="flex items-center gap-1.5 bg-green-100 text-green-700 px-2 py-1 rounded-lg">
-                                    <BarChart3 className="w-3 h-3" />
-                                    {(pipeline.results.accuracy * 100).toFixed(0)}%
+                                  <div className="flex items-center gap-1.5 bg-green-100 text-green-700 px-2 py-1 rounded-lg whitespace-nowrap">
+                                    <BarChart3 className="w-3 h-3 flex-shrink-0" />
+                                    <span className="truncate">{(pipeline.results.accuracy * 100).toFixed(0)}%</span>
                                   </div>
                                 )}
                               </div>
@@ -470,6 +497,12 @@ export const ModernSidebar = forwardRef<
           </div>
         </div>
       )}
+      
+      {/* Deleting Animation */}
+      <DeletingAnimation 
+        isVisible={isDeleting} 
+        message={`Deleting "${deletingPipelineName}"...`}
+      />
     </motion.div>
   );
 });
