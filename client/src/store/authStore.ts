@@ -56,17 +56,45 @@ export const useAuthStore = create<AuthState>()(
     login: async (email: string, password: string) => {
       set({ isLoading: true });
       try {
+        // Client-side validation
+        if (!email || !password) {
+          throw new Error('Email and password are required');
+        }
+        
+        if (!email.includes('@')) {
+          throw new Error('Please enter a valid email address');
+        }
+        
+        if (password.length < 6) {
+          throw new Error('Password must be at least 6 characters long');
+        }
+
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
         });
         
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.detail || 'Login failed');
+          
+          // Handle specific error cases
+          switch (response.status) {
+            case 400:
+              throw new Error(error.detail || 'Invalid input. Please check your email and password.');
+            case 401:
+              throw new Error(error.detail || 'Incorrect password. Please try again.');
+            case 404:
+              throw new Error(error.detail || 'Account not found. Please check your email or sign up for a new account.');
+            case 429:
+              throw new Error('Too many login attempts. Please try again in a few minutes.');
+            case 500:
+              throw new Error('Login service is temporarily unavailable. Please try again later.');
+            default:
+              throw new Error(error.detail || 'Login failed. Please try again.');
+          }
         }
         
         const data = await response.json();
@@ -82,8 +110,14 @@ export const useAuthStore = create<AuthState>()(
         // Save token separately for API calls
         localStorage.setItem('auth_token', token);
         get().saveToStorage();
-      } catch (error) {
+      } catch (error: any) {
         set({ isLoading: false });
+        
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          throw new Error('Unable to connect to the server. Please check your internet connection.');
+        }
+        
         throw error;
       }
     },
@@ -91,17 +125,51 @@ export const useAuthStore = create<AuthState>()(
     register: async (name: string, email: string, password: string) => {
       set({ isLoading: true });
       try {
+        // Client-side validation
+        if (!name || !email || !password) {
+          throw new Error('Name, email, and password are required');
+        }
+        
+        if (name.trim().length < 2) {
+          throw new Error('Name must be at least 2 characters long');
+        }
+        
+        if (!email.includes('@') || !email.includes('.')) {
+          throw new Error('Please enter a valid email address');
+        }
+        
+        if (password.length < 6) {
+          throw new Error('Password must be at least 6 characters long');
+        }
+
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ 
+            name: name.trim(), 
+            email: email.trim().toLowerCase(), 
+            password 
+          }),
         });
         
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.detail || 'Registration failed');
+          
+          // Handle specific error cases
+          switch (response.status) {
+            case 400:
+              throw new Error(error.detail || 'Invalid input. Please check your information.');
+            case 409:
+              throw new Error(error.detail || 'An account with this email already exists. Please sign in instead.');
+            case 429:
+              throw new Error('Too many registration attempts. Please try again in a few minutes.');
+            case 500:
+              throw new Error('Registration service is temporarily unavailable. Please try again later.');
+            default:
+              throw new Error(error.detail || 'Registration failed. Please try again.');
+          }
         }
         
         const data = await response.json();
@@ -117,8 +185,14 @@ export const useAuthStore = create<AuthState>()(
         // Save token separately for API calls
         localStorage.setItem('auth_token', token);
         get().saveToStorage();
-      } catch (error) {
+      } catch (error: any) {
         set({ isLoading: false });
+        
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          throw new Error('Unable to connect to the server. Please check your internet connection.');
+        }
+        
         throw error;
       }
     },

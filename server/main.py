@@ -708,15 +708,29 @@ def cleanup_temp_files(session_id: str):
 # Authentication endpoints (with proper auth integration)
 @app.post("/auth/login")
 async def login_user(user_data: UserLogin):
-    """Login endpoint"""
+    """Login endpoint with comprehensive error handling"""
     if AUTH_AVAILABLE and MONGODB_AVAILABLE:
         try:
             from auth import verify_password, create_access_token
             
+            # Validate input
+            if not user_data.email or not user_data.password:
+                raise HTTPException(status_code=400, detail="Email and password are required")
+            
+            # Check email format
+            import re
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, user_data.email):
+                raise HTTPException(status_code=400, detail="Invalid email format")
+            
             # Get user by email
             user = DatabaseManager.get_user_by_email(user_data.email)
-            if not user or not verify_password(user_data.password, user["password_hash"]):
-                raise HTTPException(status_code=401, detail="Invalid email or password")
+            if not user:
+                raise HTTPException(status_code=404, detail="Account not found. Please check your email or sign up for a new account.")
+            
+            # Verify password
+            if not verify_password(user_data.password, user["password_hash"]):
+                raise HTTPException(status_code=401, detail="Incorrect password. Please try again or reset your password.")
             
             # Create access token
             access_token = create_access_token(
@@ -735,7 +749,8 @@ async def login_user(user_data: UserLogin):
         except HTTPException:
             raise
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
+            print(f"Login error: {str(e)}")
+            raise HTTPException(status_code=500, detail="Login service temporarily unavailable. Please try again later.")
     else:
         # Guest mode fallback
         return {
@@ -750,22 +765,40 @@ async def login_user(user_data: UserLogin):
 
 @app.post("/auth/register")
 async def register_user(user_data: UserRegister):
-    """Register endpoint"""
+    """Register endpoint with comprehensive validation"""
     if AUTH_AVAILABLE and MONGODB_AVAILABLE:
         try:
             from auth import get_password_hash, create_access_token
             
+            # Validate input
+            if not user_data.email or not user_data.password or not user_data.name:
+                raise HTTPException(status_code=400, detail="Name, email, and password are required")
+            
+            # Validate name
+            if len(user_data.name.strip()) < 2:
+                raise HTTPException(status_code=400, detail="Name must be at least 2 characters long")
+            
+            # Check email format
+            import re
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, user_data.email):
+                raise HTTPException(status_code=400, detail="Invalid email format. Please enter a valid email address.")
+            
+            # Validate password strength
+            if len(user_data.password) < 6:
+                raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+            
             # Check if user already exists
             existing_user = DatabaseManager.get_user_by_email(user_data.email)
             if existing_user:
-                raise HTTPException(status_code=400, detail="Email already registered")
+                raise HTTPException(status_code=409, detail="An account with this email already exists. Please sign in instead.")
             
             # Hash password and create user
             password_hash = get_password_hash(user_data.password)
             user_id = DatabaseManager.create_user(
                 email=user_data.email,
                 password_hash=password_hash,
-                name=user_data.name
+                name=user_data.name.strip()
             )
             
             # Create access token
@@ -778,14 +811,15 @@ async def register_user(user_data: UserRegister):
                 "token_type": "bearer",
                 "user": {
                     "id": user_id,
-                    "name": user_data.name,
+                    "name": user_data.name.strip(),
                     "email": user_data.email
                 }
             }
         except HTTPException:
             raise
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
+            print(f"Registration error: {str(e)}")
+            raise HTTPException(status_code=500, detail="Registration service temporarily unavailable. Please try again later.")
     else:
         # Guest mode fallback
         return {

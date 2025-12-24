@@ -27,12 +27,52 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     password: ''
   });
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
   const { login, register, isLoading } = useAuthStore();
+
+  const validateField = (field: string, value: string) => {
+    let error = '';
+    
+    switch (field) {
+      case 'name':
+        if (mode === 'register' && value.trim().length < 2) {
+          error = 'Name must be at least 2 characters long';
+        }
+        break;
+      case 'email':
+        if (!value.includes('@') || !value.includes('.')) {
+          error = 'Please enter a valid email address';
+        }
+        break;
+      case 'password':
+        if (value.length < 6) {
+          error = 'Password must be at least 6 characters long';
+        }
+        break;
+    }
+    
+    setFieldErrors(prev => ({ ...prev, [field]: error }));
+    return error === '';
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setFieldErrors({ name: '', email: '', password: '' });
+
+    // Validate all fields
+    const nameValid = mode === 'login' || validateField('name', formData.name);
+    const emailValid = validateField('email', formData.email);
+    const passwordValid = validateField('password', formData.password);
+
+    if (!nameValid || !emailValid || !passwordValid) {
+      return;
+    }
 
     try {
       if (mode === 'login') {
@@ -53,7 +93,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    setError(''); // Clear error when user types
+    setError(''); // Clear general error when user types
+    
+    // Clear field-specific error when user starts typing
+    if (fieldErrors[field as keyof typeof fieldErrors]) {
+      setFieldErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   if (!isOpen) return null;
@@ -101,10 +146,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         placeholder="Enter your full name"
                         value={formData.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        onBlur={() => validateField('name', formData.name)}
+                        className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                          fieldErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
                         required
                       />
                     </div>
+                    {fieldErrors.name && (
+                      <p className="text-red-600 text-xs mt-1">{fieldErrors.name}</p>
+                    )}
                   </div>
                 )}
 
@@ -117,10 +168,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       placeholder="Enter your email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      onBlur={() => validateField('email', formData.email)}
+                      className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                        fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                      }`}
                       required
                     />
                   </div>
+                  {fieldErrors.email && (
+                    <p className="text-red-600 text-xs mt-1">{fieldErrors.email}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -132,7 +189,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       placeholder="Enter your password"
                       value={formData.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      onBlur={() => validateField('password', formData.password)}
+                      className={`w-full pl-10 pr-12 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                        fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                      }`}
                       required
                       minLength={6}
                     />
@@ -144,6 +204,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {fieldErrors.password && (
+                    <p className="text-red-600 text-xs mt-1">{fieldErrors.password}</p>
+                  )}
+                  {mode === 'register' && !fieldErrors.password && (
+                    <p className="text-gray-500 text-xs mt-1">Must be at least 6 characters long</p>
+                  )}
                 </div>
 
                 {error && (
@@ -175,6 +241,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     onClick={() => {
                       setMode(mode === 'login' ? 'register' : 'login');
                       setError('');
+                      setFieldErrors({ name: '', email: '', password: '' });
                       setFormData({ name: '', email: '', password: '' });
                     }}
                     className="ml-1 text-blue-600 hover:text-blue-700 font-medium"
