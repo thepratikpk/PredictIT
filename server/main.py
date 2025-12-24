@@ -40,8 +40,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173", 
         "http://127.0.0.1:5173", 
-        "https://predict-it-zeta.vercel.app",  # Your current frontend
-        "https://your-frontend-domain.com",   # Add your actual frontend domain here
+        "https://predict-i2j2pnxrs-pratik-pralhad-kochares-projects.vercel.app",   # Add your actual frontend domain here
         "http://127.0.0.1:5174"
     ],
     allow_credentials=True,
