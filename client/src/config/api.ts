@@ -3,7 +3,7 @@ const getApiUrl = (): string => {
   // In production, use the deployed backend URL
   if (import.meta.env.PROD) {
     // Render backend URL - replace 'predictit-api' with your actual Render service name
-    return 'https://predictit-api.onrender.com';
+    return 'https://predictit-1.onrender.com';
   }
   
   // In development, use local backend
