@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { Button } from './Button';
+import { Card, CardContent } from './Card';
 import { 
   Brain, 
   Settings, 

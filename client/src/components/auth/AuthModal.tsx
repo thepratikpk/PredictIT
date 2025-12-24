@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 

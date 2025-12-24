@@ -15,8 +15,8 @@ import {
   ChevronRight,
   Search
 } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { Button } from './Button';
+import { Card, CardContent } from './Card';
 import { useAuthStore } from '../store/authStore';
 import { usePipelineStore } from '../store/pipelineStore';
 import { API_BASE_URL } from '../config/api';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../Card';
+import { Button } from '../Button';
 import { BarChart3, ArrowLeft, RefreshCw, CheckCircle, XCircle, TrendingUp, Target, AlertCircle, Brain, Save, BookmarkPlus } from 'lucide-react';
 import { trainModel, preprocessData } from '../../api/mlApi';
 import { usePipelineStore } from '../../store/pipelineStore';

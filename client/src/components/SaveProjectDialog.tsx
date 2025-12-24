@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './Button';
+import { Card, CardContent, CardHeader, CardTitle } from './Card';
 import { X, Save, Loader2, CheckCircle } from 'lucide-react';
 import { usePipelineStore } from '../store/pipelineStore';
 

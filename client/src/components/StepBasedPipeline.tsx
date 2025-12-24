@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Progress } from './ui/progress';
+import { Button } from './Button';
+import { Card, CardContent, CardHeader, CardTitle } from './Card';
+import { Progress } from './Progress';
 import { ArrowLeft, CheckCircle, Save } from 'lucide-react';
 import { DataUploadStep } from './steps/DataUploadStep';
 import { PreprocessingStep } from './steps/PreprocessingStep';

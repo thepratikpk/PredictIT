@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './Card';
+import { Button } from './Button';
 import { Database, Settings, Split, Brain, BarChart3 } from 'lucide-react';
 
 interface SidebarProps {

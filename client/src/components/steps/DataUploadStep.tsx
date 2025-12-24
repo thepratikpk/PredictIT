@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../Card';
+import { Button } from '../Button';
 import { Upload, AlertCircle, CheckCircle, Database, ArrowRight } from 'lucide-react';
 import { uploadFile } from '../../api/mlApi';
 import { usePipelineStore } from '../../store/pipelineStore';
