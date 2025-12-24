@@ -42,13 +42,15 @@ def start_server():
         port = int(os.getenv('PORT', 10000))  # Render uses port 10000 by default
         
         print(f"🌐 Server starting on port {port}")
+        print(f"🔧 Environment: {os.getenv('ENVIRONMENT', 'development')}")
         
         uvicorn.run(
             app, 
             host="0.0.0.0", 
             port=port,
             workers=1,
-            log_level="info"
+            log_level="info",
+            access_log=True
         )
         
     except Exception as e:

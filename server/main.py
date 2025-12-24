@@ -38,12 +38,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173", 
-        "http://127.0.0.1:5173", 
-        "http://localhost:5174",
-        "http://127.0.0.1:5174",
-        "https://predict-i2j2pnxrs-pratik-pralhad-kochares-projects.vercel.app",  # Your Vercel deployment
-        "https://predict-it-zeta.vercel.app",  # Allow all Vercel preview deployments
+         "https://predict-it-zeta.vercel.app",  # Your current Vercel deployment
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -140,7 +135,23 @@ class TokenResponse(BaseModel):
 # Root endpoint
 @app.get("/")
 async def root():
-    return {"message": "PredictIT API is running", "version": "1.0"}
+    return {
+        "message": "PredictIT API is running", 
+        "version": "1.0",
+        "status": "healthy",
+        "cors_enabled": True,
+        "environment": os.getenv("ENVIRONMENT", "development")
+    }
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "PredictIT API"}
+
+# CORS test endpoint
+@app.get("/cors-test")
+async def cors_test():
+    return {"message": "CORS is working", "timestamp": datetime.now().isoformat()}
 
 # Upload endpoint
 @app.post("/upload", response_model=UploadResponse)
