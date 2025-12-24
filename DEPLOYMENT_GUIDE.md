@@ -6,7 +6,7 @@ Complete guide to deploy your PredictIT ML Pipeline application to production.
 1. [Prerequisites](#prerequisites)
 2. [Environment Setup](#environment-setup)
 3. [Frontend Deployment (Vercel)](#frontend-deployment-vercel)
-4. [Backend Deployment (Railway)](#backend-deployment-railway)
+4. [Backend Deployment (Render)](#backend-deployment-render)
 5. [Database Setup (MongoDB Atlas)](#database-setup-mongodb-atlas)
 6. [Cloudinary Setup](#cloudinary-setup)
 7. [Environment Variables](#environment-variables)
@@ -19,7 +19,7 @@ Complete guide to deploy your PredictIT ML Pipeline application to production.
 Before deploying, ensure you have:
 - ✅ GitHub account
 - ✅ Vercel account (for frontend)
-- ✅ Railway account (for backend)
+- ✅ Render account (for backend)
 - ✅ MongoDB Atlas account (for database)
 - ✅ Cloudinary account (for file storage)
 
@@ -43,28 +43,16 @@ git remote add origin https://github.com/YOUR_USERNAME/predictit-ml-pipeline.git
 git branch -M main
 git push -u origin main
 ```
-## 🎨 
-Frontend Deployment (Vercel)
 
-### Step 1: Update Production Backend URL
+## 🎨 Frontend Deployment (Vercel)
 
-**Important**: Before deploying, update the production backend URL in `client/src/config/api.ts`:
+### Step 1: Automatic Environment Detection
 
-```typescript
-// In client/src/config/api.ts - Line 4
-// Replace this URL with your actual Railway backend URL
-return 'https://predictit-backend-production.up.railway.app';
-```
-
-### Step 2: Automatic Environment Detection
-
-The app now automatically detects the environment:
+The app automatically detects the environment:
 - **Development**: Uses `http://localhost:8000`
-- **Production**: Uses your deployed backend URL
+- **Production**: Uses `https://predictit-api.onrender.com` (your Render backend)
 
-No need to create environment files - it works automatically!
-
-### Step 3: Deploy to Vercel
+### Step 2: Deploy to Vercel
 
 1. **Go to [Vercel.com](https://vercel.com)**
 2. **Click "New Project"**
@@ -78,47 +66,38 @@ No need to create environment files - it works automatically!
 5. **Add Environment Variables:**
    ```
    NODE_ENV=production
-   VITE_API_URL=https://your-backend-domain.railway.app
    ```
 
-6. **Deploy!** 🚀## ⚡
- Backend Deployment (Railway)
+6. **Deploy!** 🚀
 
-### Step 1: Prepare Backend Files
+## ⚡ Backend Deployment (Render)
 
-1. **Create `server/Procfile`:**
-```
-web: uvicorn main:app --host 0.0.0.0 --port $PORT
-```
+### Step 1: Backend Files Already Configured
 
-2. **Update CORS in `server/main.py`:**
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173", 
-        "http://127.0.0.1:5173",
-        "https://your-frontend-domain.vercel.app",  # Add your Vercel domain
-        "https://*.vercel.app",  # Allow all Vercel domains
-    ],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
-)
-```
+Your backend is already configured for Render with:
+- ✅ `server/render.yaml` - Render service configuration
+- ✅ `server/start.py` - Startup script
+- ✅ `server/runtime.txt` - Python version (3.10.9)
+- ✅ CORS configured for your Vercel domain
 
-### Step 2: Deploy to Railway
+### Step 2: Deploy to Render
 
-1. **Go to [Railway.app](https://railway.app)**
-2. **Click "New Project" → "Deploy from GitHub repo"**
-3. **Select your repository**
+1. **Go to [Render.com](https://render.com)**
+2. **Click "New" → "Web Service"**
+3. **Connect your GitHub repository**
 4. **Configure deployment:**
-   - Root Directory: `server`
-   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - Name: `predictit-api`
+   - Environment: `Python 3`
+   - Build Command: `cd server && pip install -r requirements.txt`
+   - Start Command: `cd server && python start.py`
+   - Plan: `Free`
 
 5. **Add Environment Variables** (see next section)
-6. **Deploy!** 🚀## 🗄️ 
-Database Setup (MongoDB Atlas)
+6. **Deploy!** 🚀
+
+Your backend will be available at: `https://predictit-api.onrender.com`
+
+## 🗄️ Database Setup (MongoDB Atlas)
 
 ### Step 1: Create MongoDB Atlas Cluster
 
@@ -160,15 +139,20 @@ Database Setup (MongoDB Atlas)
 1. **Copy from Dashboard:**
    - Cloud Name
    - API Key
-   - API Secret## 🔐 
-Environment Variables
+   - API Secret
 
-### Backend Environment Variables (Railway)
+## 🔐 Environment Variables
 
-Add these in Railway dashboard → Variables:
+### Backend Environment Variables (Render)
+
+Add these in Render dashboard → Environment:
 
 ```env
-
+PYTHON_VERSION=3.10.9
+ENVIRONMENT=production
+MONGODB_URL=mongodb+srv://predictit-user:<password>@predictit-cluster.xxxxx.mongodb.net/predictit?retryWrites=true&w=majority
+CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
+SECRET_KEY=your-super-secret-key-here
 ```
 
 ### Frontend Environment Variables (Vercel)
@@ -177,25 +161,21 @@ Add these in Vercel dashboard → Settings → Environment Variables:
 
 ```env
 NODE_ENV=production
-VITE_API_URL=https://your-backend-domain.railway.app
 ```
 
 ---
 
 ## 🚀 Final Steps
 
-### 1. Update Frontend API URL
+### 1. Update Service Name (if needed)
 
-After deploying backend, update your frontend:
-1. Copy your Railway backend URL
-2. Update Vercel environment variable `VITE_API_URL`
-3. Redeploy frontend
+If you used a different service name than `predictit-api`, update the frontend API URL in `client/src/config/api.ts`:
 
-### 2. Update Backend CORS
+```typescript
+return 'https://YOUR-SERVICE-NAME.onrender.com';
+```
 
-Add your Vercel frontend URL to CORS origins in `main.py`
-
-### 3. Test Everything
+### 2. Test Everything
 
 - ✅ User registration
 - ✅ User login  
@@ -209,15 +189,22 @@ Add your Vercel frontend URL to CORS origins in `main.py`
 ## 🔧 Quick Troubleshooting
 
 ### CORS Errors
-Make sure your frontend domain is in backend CORS origins
+- Your Vercel domain is already configured in CORS
+- Make sure your Render service is running
 
 ### Database Connection Issues  
-- Check MongoDB Atlas IP whitelist
+- Check MongoDB Atlas IP whitelist (should be 0.0.0.0/0)
 - Verify connection string format
+- Check environment variables in Render
 
 ### File Upload Issues
-- Verify Cloudinary credentials
+- Verify Cloudinary credentials in Render environment
 - Check file size limits
+
+### Render Service Issues
+- Check logs in Render dashboard
+- Verify Python version is 3.10.9
+- Ensure all dependencies are in requirements.txt
 
 ---
 
@@ -226,9 +213,9 @@ Make sure your frontend domain is in backend CORS origins
 Your PredictIT application is now live! 
 
 **Your URLs:**
-- Frontend: `https://your-app.vercel.app`
-- Backend API: `https://your-api.railway.app`
-- API Docs: `https://your-api.railway.app/docs`
+- Frontend: `https://predict-i2j2pnxrs-pratik-pralhad-kochares-projects.vercel.app`
+- Backend API: `https://predictit-api.onrender.com`
+- API Docs: `https://predictit-api.onrender.com/docs` (in development only)
 
 ---
 

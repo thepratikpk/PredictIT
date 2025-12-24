@@ -2,8 +2,8 @@
 const getApiUrl = (): string => {
   // In production, use the deployed backend URL
   if (import.meta.env.PROD) {
-    // TODO: Replace this with your actual Railway backend URL after deployment
-    return 'https://predictit-backend-production.up.railway.app';
+    // Render backend URL - replace 'predictit-api' with your actual Render service name
+    return 'https://predictit-api.onrender.com';
   }
   
   // In development, use local backend

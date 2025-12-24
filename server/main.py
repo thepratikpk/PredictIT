@@ -40,8 +40,10 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173", 
         "http://127.0.0.1:5173", 
-        "https://predict-i2j2pnxrs-pratik-pralhad-kochares-projects.vercel.app",   # Add your actual frontend domain here
-        "http://127.0.0.1:5174"
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "https://predict-i2j2pnxrs-pratik-pralhad-kochares-projects.vercel.app",  # Your Vercel deployment
+        "https://*.vercel.app",  # Allow all Vercel preview deployments
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
