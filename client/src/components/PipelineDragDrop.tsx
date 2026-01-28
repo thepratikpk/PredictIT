@@ -67,6 +67,7 @@ interface NodeData {
     featureCount?: number;
     sampleData?: any[];
     rowCount?: number;
+    [key: string]: unknown;
 }
 
 // Toolbox items
@@ -79,7 +80,7 @@ const toolboxItems = [
 ];
 
 // Custom Node Components
-function DataNode({ data, selected }: NodeProps<NodeData>) {
+function DataNode({ data, selected }: NodeProps<Node<NodeData>>) {
     return (
         <div className={`pipeline-node ${selected ? 'selected' : ''} ${data.status === 'complete' ? 'completed' : ''}`}>
             <Handle type="source" position={Position.Right} />
@@ -96,7 +97,7 @@ function DataNode({ data, selected }: NodeProps<NodeData>) {
     );
 }
 
-function PreprocessNode({ data, selected }: NodeProps<NodeData>) {
+function PreprocessNode({ data, selected }: NodeProps<Node<NodeData>>) {
     return (
         <div className={`pipeline-node ${selected ? 'selected' : ''} ${data.status === 'complete' ? 'completed' : ''}`}>
             <Handle type="target" position={Position.Left} />
@@ -112,7 +113,7 @@ function PreprocessNode({ data, selected }: NodeProps<NodeData>) {
     );
 }
 
-function SplitNode({ data, selected }: NodeProps<NodeData>) {
+function SplitNode({ data, selected }: NodeProps<Node<NodeData>>) {
     const ratio = data.ratio || 0.2;
     return (
         <div className={`pipeline-node ${selected ? 'selected' : ''} ${data.status === 'complete' ? 'completed' : ''}`}>
@@ -129,7 +130,7 @@ function SplitNode({ data, selected }: NodeProps<NodeData>) {
     );
 }
 
-function ModelNode({ data, selected }: NodeProps<NodeData>) {
+function ModelNode({ data, selected }: NodeProps<Node<NodeData>>) {
     return (
         <div className={`pipeline-node ${selected ? 'selected' : ''} ${data.status === 'complete' ? 'completed' : ''}`}>
             <Handle type="target" position={Position.Left} />
@@ -145,7 +146,7 @@ function ModelNode({ data, selected }: NodeProps<NodeData>) {
     );
 }
 
-function ResultsNode({ data, selected }: NodeProps<NodeData>) {
+function ResultsNode({ data, selected }: NodeProps<Node<NodeData>>) {
     return (
         <div className={`pipeline-node ${selected ? 'selected' : ''} ${data.status === 'complete' ? 'completed' : ''}`}>
             <Handle type="target" position={Position.Left} />
@@ -552,7 +553,7 @@ function ConfigPanel({
 // Main Pipeline Editor
 function PipelineEditorInner({ onBack, onProjectSaved }: { onBack: () => void; onProjectSaved?: () => void }) {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
-    const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node<NodeData>>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
     const [isRunning, setIsRunning] = useState(false);

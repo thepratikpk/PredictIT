@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from './Button';
-import { Card, CardContent } from './Card';
+import { Card } from './Card';
 import {
   ArrowRight,
   CheckCircle,

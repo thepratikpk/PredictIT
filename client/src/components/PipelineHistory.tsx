@@ -9,7 +9,6 @@ import {
   Calendar,
   BarChart3,
   Database,
-  Brain,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -48,7 +47,7 @@ interface ModernSidebarProps {
 export const ModernSidebar = forwardRef<
   { refreshProjects: () => void },
   ModernSidebarProps
->(({ onAuthClick, onNewPipeline, onLoadPipeline, onProjectSaved, onSidebarToggle }, ref) => {
+>(({ onAuthClick, onNewPipeline, onLoadPipeline, onSidebarToggle }, ref) => {
   const [savedPipelines, setSavedPipelines] = useState<SavedPipeline[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPipeline, setSelectedPipeline] = useState<string | null>(null);

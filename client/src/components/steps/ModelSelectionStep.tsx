@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 import { Button } from '../Button';
-import { Brain, ArrowRight, ArrowLeft, Info, Target, Check } from 'lucide-react';
+import { Brain, ArrowRight, ArrowLeft, Target, Check } from 'lucide-react';
 import { usePipelineStore } from '../../store/pipelineStore';
 
 interface ModelSelectionStepProps {

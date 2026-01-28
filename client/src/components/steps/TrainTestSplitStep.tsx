@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 import { Button } from '../Button';
-import { Scissors, ArrowRight, ArrowLeft, Info, Check } from 'lucide-react';
+import { Scissors, ArrowRight, ArrowLeft, Info } from 'lucide-react';
 import { usePipelineStore } from '../../store/pipelineStore';
 
 interface TrainTestSplitStepProps {

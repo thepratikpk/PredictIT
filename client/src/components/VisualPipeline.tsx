@@ -1,12 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     ReactFlow,
     Controls,
     Background,
     useNodesState,
     useEdgesState,
-    addEdge,
-    Connection,
     Node,
     Edge,
     Handle,
@@ -16,15 +14,12 @@ import {
 import '@xyflow/react/dist/style.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './Button';
-import { Card, CardContent, CardHeader, CardTitle } from './Card';
 import {
     Upload,
     Settings,
     Scissors,
     Brain,
     BarChart3,
-    Play,
-    X,
     Check,
     ArrowLeft,
     Save,
@@ -43,7 +38,7 @@ import { SaveProjectDialog } from './SaveProjectDialog';
 
 // Pipeline Node Component
 const PipelineNode = ({ data, selected }: NodeProps) => {
-    const Icon = data.icon;
+    const Icon = data.icon as React.ElementType;
     const isCompleted = data.completed;
     const isCurrent = data.current;
 
@@ -55,7 +50,7 @@ const PipelineNode = ({ data, selected }: NodeProps) => {
         ${isCompleted ? 'completed' : ''}
         ${isCurrent ? 'border-md-primary' : ''}
       `}
-            onClick={data.onClick}
+            onClick={data.onClick as React.MouseEventHandler<HTMLDivElement>}
         >
             <Handle type="target" position={Position.Left} />
             <div
@@ -68,8 +63,8 @@ const PipelineNode = ({ data, selected }: NodeProps) => {
                     <Icon className={`w-5 h-5 ${isCurrent ? 'text-md-primary' : 'text-gray-600'}`} />
                 )}
             </div>
-            <div className="font-medium text-gray-900">{data.label}</div>
-            <div className="text-xs text-gray-500 mt-1">{data.description}</div>
+            <div className="font-medium text-gray-900">{data.label as string}</div>
+            <div className="text-xs text-gray-500 mt-1">{data.description as string}</div>
             <Handle type="source" position={Position.Right} />
         </div>
     );
@@ -105,12 +100,11 @@ export const VisualPipeline: React.FC<VisualPipelineProps> = ({
         results,
         resetPipeline,
         getCompletedSteps,
-        isRunning,
     } = store;
 
     // Determine node states
     const nodeStates = useMemo(() => ({
-        upload: { completed: !!datasetInfo, current: selectedNode === 'upload' },
+        upload: { completed: !!datasetInfo, current: selectedNode === 'upload', enabled: true },
         preprocess: { completed: !!preprocessingConfig, current: selectedNode === 'preprocess', enabled: !!datasetInfo },
         split: { completed: !!splitConfig, current: selectedNode === 'split', enabled: !!preprocessingConfig },
         model: { completed: !!modelConfig, current: selectedNode === 'model', enabled: !!splitConfig },

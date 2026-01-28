@@ -1,0 +1,73 @@
+src/components/PipelineDragDrop.tsx(82,49): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node<Record<string, unknown>, string | undefined>'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(84,72): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(90,14): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(90,44): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(92,52): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(99,55): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node<Record<string, unknown>, string | undefined>'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(101,72): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(108,14): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(109,64): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(109,101): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(115,50): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node<Record<string, unknown>, string | undefined>'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(116,19): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(118,72): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(125,14): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(132,50): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node<Record<string, unknown>, string | undefined>'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(134,72): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(141,14): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(142,63): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(148,52): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node<Record<string, unknown>, string | undefined>'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(150,72): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(156,14): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(157,78): error TS18046: 'data' is of type 'unknown'.
+src/components/PipelineDragDrop.tsx(251,17): error TS2344: Type 'NodeData' does not satisfy the constraint 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'NodeData'.
+src/components/PipelineDragDrop.tsx(555,60): error TS2344: Type 'NodeData' does not satisfy the constraint 'Node'.
+  Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(603,33): error TS2344: Type 'NodeData' does not satisfy the constraint 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'NodeData'.
+src/components/PipelineDragDrop.tsx(610,22): error TS2345: Argument of type '(nds: NodeData[]) => (NodeData | Node<NodeData>)[]' is not assignable to parameter of type 'SetStateAction<NodeData[]>'.
+  Type '(nds: NodeData[]) => (NodeData | Node<NodeData>)[]' is not assignable to type '(prevState: NodeData[]) => NodeData[]'.
+    Type '(NodeData | Node<NodeData>)[]' is not assignable to type 'NodeData[]'.
+      Type 'NodeData | Node<NodeData>' is not assignable to type 'NodeData'.
+        Type 'Node<NodeData>' has no properties in common with type 'NodeData'.
+src/components/PipelineDragDrop.tsx(625,30): error TS2339: Property 'id' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(626,59): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(637,51): error TS2339: Property 'id' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(648,46): error TS2339: Property 'type' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(649,52): error TS2339: Property 'type' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(650,47): error TS2339: Property 'type' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(651,47): error TS2339: Property 'type' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(652,49): error TS2339: Property 'type' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(659,23): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(667,24): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(671,24): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(675,24): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(681,40): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(682,39): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(690,60): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(697,39): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(698,42): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(699,44): error TS2339: Property 'data' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(705,44): error TS2339: Property 'id' does not exist on type 'NodeData'.
+src/components/PipelineDragDrop.tsx(822,25): error TS2322: Type 'NodeData[]' is not assignable to type 'Node[]'.
+  Type 'NodeData' is not assignable to type 'Node'.
+    Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: Record<string, unknown>; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; ... 19 more ...; measured?: { ...; } | undefined; }': id, position, data
+src/components/PipelineDragDrop.tsx(824,25): error TS2322: Type 'OnNodesChange<NodeData>' is not assignable to type 'OnNodesChange<Node>'.
+  Type 'Node' has no properties in common with type 'NodeData'.
+src/components/PipelineDragDrop.tsx(831,25): error TS2322: Type '{ dataNode: ({ data, selected }: NodeProps<NodeData>) => JSX.Element; preprocessNode: ({ data, selected }: NodeProps<NodeData>) => JSX.Element; splitNode: ({ data, selected }: NodeProps<NodeData>) => JSX.Element; modelNode: ({ data, selected }: NodeProps<NodeData>) => JSX.Element; resultsNode: ({ data, selected }: N...' is not assignable to type 'NodeTypes'.
+  Property 'dataNode' is incompatible with index signature.
+    Type '({ data, selected }: NodeProps<NodeData>) => Element' is not assignable to type 'ComponentType<Pick<Node<Record<string, unknown>, string | undefined>, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId"> & Required<...> & { ...; } & { ...; }>'.
+      Type '({ data, selected }: NodeProps<NodeData>) => Element' is not assignable to type 'FunctionComponent<Pick<Node<Record<string, unknown>, string | undefined>, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId"> & Required<...> & { ...; } & { ...; }>'.
+        Types of parameters '__0' and 'props' are incompatible.
+          Type 'Pick<Node<Record<string, unknown>, string | undefined>, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId"> & Required<...> & { ...; } & { ...; }' is not assignable to type 'NodeProps<NodeData>'.
+            Type 'Pick<Node<Record<string, unknown>, string | undefined>, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId"> & Required<...> & { ...; } & { ...; }' is not assignable to type 'Pick<NodeData, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId">'.
+              Property 'height' is optional in type 'Pick<Node<Record<string, unknown>, string | undefined>, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId"> & Required<...> & { ...; } & { ...; }' but required in type 'Pick<NodeData, "id" | "height" | "width" | "data" | "sourcePosition" | "targetPosition" | "dragHandle" | "parentId">'.
+src/components/PipelineDragDrop.tsx(851,70): error TS2322: Type 'NodeData[]' is not assignable to type 'Node<NodeData>[]'.
+  Type 'NodeData' is not assignable to type 'Node<NodeData>'.
+    Type 'NodeData' is missing the following properties from type '{ id: string; position: XYPosition; data: NodeData; sourcePosition?: Position | undefined; targetPosition?: Position | undefined; hidden?: boolean | undefined; ... 18 more ...; measured?: { ...; } | undefined; }': id, position, data

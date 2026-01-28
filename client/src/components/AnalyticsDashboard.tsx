@@ -6,7 +6,6 @@ import {
     TrendingUp,
     Percent,
     CheckCircle,
-    XCircle,
     Activity,
     Layers,
     Database,
