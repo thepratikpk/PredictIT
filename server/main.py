@@ -20,9 +20,9 @@ try:
     from database import DatabaseManager, CloudinaryManager, MONGODB_AVAILABLE
     from auth import get_current_user_optional, get_current_user
     AUTH_AVAILABLE = True
-    print("✓ Database and Cloudinary modules loaded")
+    print("[OK] Database and Cloudinary modules loaded")
 except ImportError as e:
-    print(f"⚠️  Database modules not available: {e}")
+    print(f"[WARN] Database modules not available: {e}")
     AUTH_AVAILABLE = False
     MONGODB_AVAILABLE = False
 
@@ -463,7 +463,7 @@ async def save_project(
                     
                     if CLOUDINARY_AVAILABLE:
                         user_id = current_user.get("user_id", "guest") if current_user else "guest"
-                        print(f"📤 Uploading file to Cloudinary for project: {project_data.name}")
+                        print(f"[UPLOAD] Uploading file to Cloudinary for project: {project_data.name}")
                         
                         # Upload to Cloudinary in 'datasets' folder with user-specific naming
                         cloudinary_result = CloudinaryManager.upload_file(
@@ -475,16 +475,16 @@ async def save_project(
                         file_url = cloudinary_result.get('url')
                         file_public_id = cloudinary_result.get('public_id')
                         
-                        print(f"✅ File uploaded to Cloudinary: {file_url}")
+                        print(f"[OK] File uploaded to Cloudinary: {file_url}")
                         
                     else:
-                        print("⚠️  Cloudinary not available - saving project without cloud storage")
+                        print("[WARN] Cloudinary not available - saving project without cloud storage")
                         
                 except Exception as e:
-                    print(f"⚠️  Failed to upload file to Cloudinary: {e}")
+                    print(f"[WARN] Failed to upload file to Cloudinary: {e}")
                     # Continue saving project even if Cloudinary upload fails
             else:
-                print(f"⚠️  Local file not found for session: {project_data.session_id}")
+                print(f"[WARN] Local file not found for session: {project_data.session_id}")
         
         # Save to database if available, otherwise use in-memory storage
         if AUTH_AVAILABLE and MONGODB_AVAILABLE and current_user:
@@ -624,7 +624,7 @@ async def get_project(
         # If project has a Cloudinary file URL, download it to temp for processing
         if project.get("file_url") and project.get("session_id"):
             try:
-                print(f"📥 Downloading file from Cloudinary for project: {project['name']}")
+                print(f"[DOWNLOAD] Downloading file from Cloudinary for project: {project['name']}")
                 
                 # Download file from Cloudinary
                 response = requests.get(project["file_url"])
@@ -634,7 +634,7 @@ async def get_project(
                     with open(temp_file_path, 'wb') as f:
                         f.write(response.content)
                     
-                    print(f"✅ Downloaded file from Cloudinary for project: {project['name']}")
+                    print(f"[OK] Downloaded file from Cloudinary for project: {project['name']}")
                     
                     # Also create processed version if preprocessing was done
                     if project.get("preprocessing_config"):
@@ -642,13 +642,13 @@ async def get_project(
                         # Copy the file as processed (since it was already processed when saved)
                         with open(processed_path, 'wb') as f:
                             f.write(response.content)
-                        print(f"✅ Created processed file for session: {project['session_id']}")
+                        print(f"[OK] Created processed file for session: {project['session_id']}")
                         
                 else:
-                    print(f"⚠️  Failed to download file from Cloudinary: HTTP {response.status_code}")
+                    print(f"[WARN] Failed to download file from Cloudinary: HTTP {response.status_code}")
                     
             except Exception as e:
-                print(f"⚠️  Failed to download file from Cloudinary: {e}")
+                print(f"[WARN] Failed to download file from Cloudinary: {e}")
         
         return project
     except HTTPException:
@@ -684,12 +684,12 @@ async def delete_project(
                 if CLOUDINARY_AVAILABLE:
                     success = CloudinaryManager.delete_file(project["file_public_id"], resource_type="raw")
                     if success:
-                        print(f"✅ Deleted file from Cloudinary: {project['file_public_id']}")
+                        print(f"[OK] Deleted file from Cloudinary: {project['file_public_id']}")
                         cloudinary_deleted = True
                     else:
-                        print(f"⚠️  Failed to delete file from Cloudinary: {project['file_public_id']}")
+                        print(f"[WARN] Failed to delete file from Cloudinary: {project['file_public_id']}")
             except Exception as e:
-                print(f"⚠️  Error deleting Cloudinary file: {e}")
+                print(f"[WARN] Error deleting Cloudinary file: {e}")
         
         # Delete local temp files if they exist
         temp_files_cleaned = False
@@ -730,9 +730,9 @@ def cleanup_temp_files(session_id: str):
         if os.path.exists(temp_file):
             try:
                 os.remove(temp_file)
-                print(f"🗑️  Cleaned up temp file: {os.path.basename(temp_file)}")
+                print(f"[DEL] Cleaned up temp file: {os.path.basename(temp_file)}")
             except Exception as e:
-                print(f"⚠️  Failed to delete temp file {temp_file}: {e}")
+                print(f"[WARN] Failed to delete temp file {temp_file}: {e}")
 
 # Authentication endpoints (with proper auth integration)
 @app.post("/auth/login")

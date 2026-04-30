@@ -23,17 +23,17 @@ def check_dependencies():
     for package in required_packages:
         try:
             __import__(package)
-            print(f"✓ {package} - OK")
+            print(f"  [OK] {package}")
         except ImportError:
             missing_packages.append(package)
-            print(f"✗ {package} - MISSING")
+            print(f"  [FAIL] {package} - MISSING")
     
     return missing_packages
 
 def start_server():
     """Start the FastAPI server"""
     try:
-        print("🚀 Starting PredictIT API server on Render...")
+        print("[START] Starting PredictIT API server on Render...")
         
         # Import and run the app
         from main import app
@@ -41,8 +41,8 @@ def start_server():
         
         port = int(os.getenv('PORT', 10000))  # Render uses port 10000 by default
         
-        print(f"🌐 Server starting on port {port}")
-        print(f"🔧 Environment: {os.getenv('ENVIRONMENT', 'development')}")
+        print(f"[NET] Server starting on port {port}")
+        print(f"[ENV] Environment: {os.getenv('ENVIRONMENT', 'development')}")
         
         uvicorn.run(
             app, 
@@ -54,23 +54,23 @@ def start_server():
         )
         
     except Exception as e:
-        print(f"❌ Failed to start server: {e}")
+        print(f"[ERROR] Failed to start server: {e}")
         traceback.print_exc()
         sys.exit(1)
 
 if __name__ == "__main__":
-    print("🔧 PredictIT API Starting on Render")
+    print("[START] PredictIT API Starting on Render")
     print("=" * 40)
     
     # Check dependencies
-    print("📦 Checking dependencies...")
+    print("[CHECK] Checking dependencies...")
     missing = check_dependencies()
     
     if missing:
-        print(f"❌ Missing packages: {missing}")
+        print(f"[ERROR] Missing packages: {missing}")
         sys.exit(1)
     
-    print("✅ All dependencies available")
+    print("[OK] All dependencies available")
     
     # Start server
     start_server()

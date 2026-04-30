@@ -28,10 +28,10 @@ if MONGODB_URL and MONGODB_URL != "mongodb://localhost:27017/ml_pipeline":
         
         # Test connection
         client.admin.command('ping')
-        print("✓ Connected to MongoDB successfully")
+        print("[OK] Connected to MongoDB successfully")
         MONGODB_AVAILABLE = True
     except Exception as e:
-        print(f"⚠️  MongoDB connection failed: {e}")
+        print(f"[WARN] MongoDB connection failed: {e}")
         print("Running in local mode without database features")
         MONGODB_AVAILABLE = False
         client = None
@@ -42,7 +42,7 @@ if MONGODB_URL and MONGODB_URL != "mongodb://localhost:27017/ml_pipeline":
         chat_history_collection = None
         files_collection = None
 else:
-    print("⚠️  MongoDB not configured, running in local mode")
+    print("[WARN] MongoDB not configured, running in local mode")
     MONGODB_AVAILABLE = False
     client = None
     db = None
@@ -66,11 +66,11 @@ try:
             api_secret=api_secret
         )
         CLOUDINARY_AVAILABLE = True
-        print("✓ Cloudinary configured successfully")
+        print("[OK] Cloudinary configured successfully")
     else:
-        print("⚠️  Cloudinary not configured, file uploads will be local only")
+        print("[WARN] Cloudinary not configured, file uploads will be local only")
 except Exception as e:
-    print(f"⚠️  Cloudinary configuration failed: {e}")
+    print(f"[WARN] Cloudinary configuration failed: {e}")
 
 class DatabaseManager:
     @staticmethod
