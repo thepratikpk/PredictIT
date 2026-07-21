@@ -8,6 +8,9 @@ interface PipelineState {
   isRunning: boolean;
   results: any | null;
   currentStep: number;
+  templateIdToLoad: string | null;
+  loadedNodes: any[] | null;
+  loadedEdges: any[] | null;
   
   // Step data
   datasetInfo: any | null;
@@ -46,10 +49,11 @@ interface PipelineState {
   setFileInfo: (url: string | null, fileName: string | null) => void;
   setAnimationState: (state: Partial<PipelineState['animationState']>) => void;
   resetPipeline: () => void;
-  startNewPipeline: () => void; // New action for starting fresh
+  startNewPipeline: () => void;
+  setTemplateIdToLoad: (templateId: string | null) => void;
   
   // Project management
-  saveProject: (name: string, description?: string) => Promise<string | null>;
+  saveProject: (name: string, description?: string, nodes?: any[], edges?: any[]) => Promise<string | null>;
   loadProject: (projectId: string) => Promise<boolean>;
   refreshProjects: () => Promise<void>; // New action to refresh project list
   
@@ -85,6 +89,9 @@ const initialState = {
   fileUrl: null,
   fileName: null,
   animationState: initialAnimationState,
+  templateIdToLoad: null,
+  loadedNodes: null,
+  loadedEdges: null,
 };
 
 export const usePipelineStore = create<PipelineState>()(
@@ -178,8 +185,12 @@ export const usePipelineStore = create<PipelineState>()(
       console.log('Started new pipeline - cleared all data');
     },
     
+    setTemplateIdToLoad: (templateId) => {
+      set({ templateIdToLoad: templateId });
+    },
+    
     // Project management
-    saveProject: async (name: string, description = '') => {
+    saveProject: async (name: string, description = '', nodes = [], edges = []) => {
       const token = localStorage.getItem('auth_token');
       if (!token) {
         console.error('❌ No auth token found');
@@ -210,7 +221,9 @@ export const usePipelineStore = create<PipelineState>()(
             preprocessing_config: state.preprocessingConfig,
             split_config: state.splitConfig,
             model_config: state.modelConfig,
-            results: state.results
+            results: state.results,
+            nodes,
+            edges
           })
         });
         
@@ -262,6 +275,9 @@ export const usePipelineStore = create<PipelineState>()(
             results: project.results,
             fileUrl: project.file_url,
             fileName: project.dataset_info?.filename,
+            // Restore visual canvas graph
+            loadedNodes: project.nodes || null,
+            loadedEdges: project.edges || null,
             // Always jump to step 4 for saved projects (file is restored, preprocessing done)
             currentStep: 4
           });

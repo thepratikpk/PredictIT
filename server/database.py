@@ -25,6 +25,8 @@ if MONGODB_URL and MONGODB_URL != "mongodb://localhost:27017/ml_pipeline":
         sessions_collection = db.sessions
         chat_history_collection = db.chat_history
         files_collection = db.files
+        templates_collection = db.pipeline_templates
+        docs_collection = db.docs_content
         
         # Test connection
         client.admin.command('ping')
@@ -41,6 +43,8 @@ if MONGODB_URL and MONGODB_URL != "mongodb://localhost:27017/ml_pipeline":
         sessions_collection = None
         chat_history_collection = None
         files_collection = None
+        templates_collection = None
+        docs_collection = None
 else:
     print("[WARN] MongoDB not configured, running in local mode")
     MONGODB_AVAILABLE = False
@@ -51,6 +55,8 @@ else:
     sessions_collection = None
     chat_history_collection = None
     files_collection = None
+    templates_collection = None
+    docs_collection = None
 
 # Cloudinary Configuration
 CLOUDINARY_AVAILABLE = False
@@ -126,6 +132,8 @@ class DatabaseManager:
             "split_config": project_data.get("split_config"),
             "model_config": project_data.get("model_config"),
             "results": project_data.get("results"),
+            "nodes": project_data.get("nodes", []),
+            "edges": project_data.get("edges", []),
             "session_id": project_data.get("session_id"),
             "file_url": project_data.get("file_url"),  # Cloudinary URL
             "file_public_id": project_data.get("file_public_id"),  # Cloudinary public ID
@@ -305,6 +313,96 @@ class DatabaseManager:
             file["_id"] = str(file["_id"])
         
         return file
+
+    # =========================================================
+    # Templates Management
+    # =========================================================
+
+    @staticmethod
+    def get_templates(category: Optional[str] = None, difficulty: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get pipeline templates with optional filtering"""
+        if not MONGODB_AVAILABLE or templates_collection is None:
+            return []
+        query = {}
+        if category:
+            query["category"] = category
+        if difficulty:
+            query["difficulty"] = difficulty
+        templates = list(templates_collection.find(query).sort("name", 1))
+        for t in templates:
+            t["_id"] = str(t["_id"])
+        return templates
+
+    @staticmethod
+    def get_template_by_id(template_id: str) -> Optional[Dict[str, Any]]:
+        """Get a single template by ID"""
+        if not MONGODB_AVAILABLE or templates_collection is None:
+            return None
+        try:
+            template = templates_collection.find_one({"_id": ObjectId(template_id)})
+            if template:
+                template["_id"] = str(template["_id"])
+            return template
+        except:
+            return None
+
+    @staticmethod
+    def seed_templates_if_empty():
+        """Idempotent seed: insert starter templates only if collection is empty"""
+        if not MONGODB_AVAILABLE or templates_collection is None:
+            return
+        if templates_collection.count_documents({}) == 0:
+            try:
+                from seed_data import PIPELINE_TEMPLATES
+                for t in PIPELINE_TEMPLATES:
+                    t["created_at"] = datetime.utcnow()
+                templates_collection.insert_many(PIPELINE_TEMPLATES)
+                print(f"[SEED] Inserted {len(PIPELINE_TEMPLATES)} pipeline templates")
+            except Exception as e:
+                print(f"[WARN] Failed to seed templates: {e}")
+
+    # =========================================================
+    # Docs Content Management
+    # =========================================================
+
+    @staticmethod
+    def get_docs(section: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get documentation entries with optional section filter"""
+        if not MONGODB_AVAILABLE or docs_collection is None:
+            return []
+        query = {}
+        if section:
+            query["section"] = section
+        docs = list(docs_collection.find(query).sort("order", 1))
+        for d in docs:
+            d["_id"] = str(d["_id"])
+        return docs
+
+    @staticmethod
+    def get_doc_by_slug(slug: str) -> Optional[Dict[str, Any]]:
+        """Get a single doc entry by slug"""
+        if not MONGODB_AVAILABLE or docs_collection is None:
+            return None
+        doc = docs_collection.find_one({"slug": slug})
+        if doc:
+            doc["_id"] = str(doc["_id"])
+        return doc
+
+    @staticmethod
+    def seed_docs_if_empty():
+        """Idempotent seed: insert docs content only if collection is empty"""
+        if not MONGODB_AVAILABLE or docs_collection is None:
+            return
+        if docs_collection.count_documents({}) == 0:
+            try:
+                from seed_data import DOCS_CONTENT
+                for d in DOCS_CONTENT:
+                    d["created_at"] = datetime.utcnow()
+                docs_collection.insert_many(DOCS_CONTENT)
+                print(f"[SEED] Inserted {len(DOCS_CONTENT)} docs entries")
+            except Exception as e:
+                print(f"[WARN] Failed to seed docs: {e}")
+
 
 class CloudinaryManager:
     @staticmethod

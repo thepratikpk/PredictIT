@@ -12,7 +12,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Sparkles
+  Sparkles,
+  LayoutGrid,
+  BookOpen
 } from 'lucide-react';
 import { Button } from './Button';
 import { DeletingAnimation } from './DeletingAnimation';
@@ -42,12 +44,17 @@ interface ModernSidebarProps {
   onLoadPipeline: (pipelineId: string) => void;
   onProjectSaved?: () => void;
   onSidebarToggle?: (isCollapsed: boolean) => void;
+  onTemplatesClick?: () => void;
+  onDocsClick?: () => void;
 }
 
 export const ModernSidebar = forwardRef<
   { refreshProjects: () => void },
   ModernSidebarProps
->(({ onAuthClick, onNewPipeline, onLoadPipeline, onSidebarToggle }, ref) => {
+>(({
+  onAuthClick, onNewPipeline, onLoadPipeline, onSidebarToggle,
+  onTemplatesClick, onDocsClick
+}, ref) => {
   const [savedPipelines, setSavedPipelines] = useState<SavedPipeline[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPipeline, setSelectedPipeline] = useState<string | null>(null);
@@ -179,7 +186,7 @@ export const ModernSidebar = forwardRef<
           </Button>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 space-y-2">
           <Button
             onClick={handleNewPipeline}
             className={`w-full ${isCollapsed ? 'px-0' : ''}`}
@@ -187,6 +194,24 @@ export const ModernSidebar = forwardRef<
             <Plus className="w-4 h-4" />
             {!isCollapsed && <span className="ml-2">New Pipeline</span>}
           </Button>
+
+          {/* Templates nav */}
+          <button
+            onClick={onTemplatesClick}
+            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-md-on-surface-variant hover:bg-md-surface-dim hover:text-md-on-surface transition-colors ${isCollapsed ? 'justify-center' : ''}`}
+          >
+            <LayoutGrid className="w-4 h-4 flex-shrink-0" />
+            {!isCollapsed && <span>Templates</span>}
+          </button>
+
+          {/* Docs nav */}
+          <button
+            onClick={onDocsClick}
+            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-md-on-surface-variant hover:bg-md-surface-dim hover:text-md-on-surface transition-colors ${isCollapsed ? 'justify-center' : ''}`}
+          >
+            <BookOpen className="w-4 h-4 flex-shrink-0" />
+            {!isCollapsed && <span>Docs</span>}
+          </button>
         </div>
       </div>
 

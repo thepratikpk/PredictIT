@@ -9,12 +9,16 @@ interface SaveProjectDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSaved?: (projectId: string) => void;
+  nodes?: any[];
+  edges?: any[];
 }
 
 export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
   isOpen,
   onClose,
-  onSaved
+  onSaved,
+  nodes = [],
+  edges = []
 }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -36,7 +40,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
 
     try {
       console.log('💾 Saving project:', name);
-      const projectId = await saveProject(name.trim(), description.trim());
+      const projectId = await saveProject(name.trim(), description.trim(), nodes, edges);
       
       if (projectId) {
         console.log('✅ Project saved successfully:', projectId);

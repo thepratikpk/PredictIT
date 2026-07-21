@@ -4,17 +4,23 @@ import { PipelineDragDrop } from './components/PipelineDragDrop';
 import { ModernSidebar } from './components/PipelineHistory';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/auth/AuthModal';
+import { TemplateGallery } from './components/TemplateGallery';
+import { DocsDrawer } from './components/DocsDrawer';
 import { usePipelineStore } from './store/pipelineStore';
 import { useAuthStore } from './store/authStore';
+import { PipelineTemplate } from './types';
+import toast from 'react-hot-toast';
 
 function App() {
-  const [viewMode, setViewMode] = useState<'landing' | 'pipeline'>('landing');
+  const [viewMode, setViewMode] = useState<'landing' | 'pipeline' | 'templates'>('landing');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isLoadingPipeline, setIsLoadingPipeline] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [showDocsDrawer, setShowDocsDrawer] = useState(false);
+  const [docsScrollTo, setDocsScrollTo] = useState<string | undefined>();
 
   const sidebarRef = useRef<{ refreshProjects: () => void } | null>(null);
 
@@ -82,6 +88,12 @@ function App() {
 
   const handleBackToHome = () => {
     setViewMode('landing');
+  };
+
+  const handleUseTemplate = (template: PipelineTemplate) => {
+    startNewPipeline();
+    usePipelineStore.getState().setTemplateIdToLoad(template._id);
+    setViewMode('pipeline');
   };
 
   const hasProgress = currentStep > 1 || datasetInfo;
@@ -155,6 +167,8 @@ function App() {
         onLoadPipeline={handleLoadPipeline}
         onProjectSaved={handleProjectSaved}
         onSidebarToggle={handleSidebarToggle}
+        onTemplatesClick={() => setViewMode('templates')}
+        onDocsClick={() => setShowDocsDrawer(true)}
         ref={sidebarRef}
       />
 
@@ -163,12 +177,24 @@ function App() {
         className={`min-h-screen transition-all duration-200 ease-md-standard ${sidebarCollapsed ? 'ml-0 lg:ml-16' : 'ml-0 lg:ml-72'
           }`}
       >
-        <PipelineDragDrop
-          onBack={handleBackToHome}
-          onProjectSaved={handleProjectSaved}
-          sidebarCollapsed={sidebarCollapsed}
-          setSidebarCollapsed={setSidebarCollapsed}
-        />
+        {viewMode === 'pipeline' && (
+          <PipelineDragDrop
+            onBack={handleBackToHome}
+            onProjectSaved={handleProjectSaved}
+            sidebarCollapsed={sidebarCollapsed}
+            setSidebarCollapsed={setSidebarCollapsed}
+            onOpenDocs={(slug) => {
+              setDocsScrollTo(slug);
+              setShowDocsDrawer(true);
+            }}
+          />
+        )}
+        {viewMode === 'templates' && (
+          <TemplateGallery
+            onBack={() => setViewMode('pipeline')}
+            onUseTemplate={handleUseTemplate}
+          />
+        )}
       </main>
 
       <AuthModal
@@ -176,6 +202,15 @@ function App() {
         onClose={() => setShowAuthModal(false)}
         initialMode={authMode}
         onSuccess={() => setShowAuthModal(false)}
+      />
+
+      <DocsDrawer
+        isOpen={showDocsDrawer}
+        onClose={() => {
+          setShowDocsDrawer(false);
+          setDocsScrollTo(undefined);
+        }}
+        scrollToBlock={docsScrollTo}
       />
 
       {/* Toast */}
